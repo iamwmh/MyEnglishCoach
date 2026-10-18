@@ -234,15 +234,31 @@ struct ScoringRationaleCard: View {
 }
 
 struct NewReviewBadge: View {
-    let isNew: Bool
+    let stage: StudyStage
 
     var body: some View {
-        Text(isNew ? "新学" : "复习")
+        Text(stage.badgeTitle)
             .font(.caption.weight(.semibold))
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
-            .background(isNew ? AppTheme.gold.opacity(0.2) : AppTheme.navy.opacity(0.1))
-            .foregroundStyle(isNew ? AppTheme.navy : AppTheme.navySoft)
+            .background(badgeBackground)
+            .foregroundStyle(badgeForeground)
             .clipShape(Capsule())
+    }
+
+    private var badgeBackground: Color {
+        switch stage {
+        case .fresh: AppTheme.gold.opacity(0.2)
+        case .review: AppTheme.navy.opacity(0.1)
+        case .rollback: AppTheme.rust.opacity(0.12)
+        }
+    }
+
+    private var badgeForeground: Color {
+        switch stage {
+        case .fresh: AppTheme.navy
+        case .review: AppTheme.navySoft
+        case .rollback: AppTheme.rust
+        }
     }
 }

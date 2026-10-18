@@ -44,15 +44,15 @@ final class StudyStore {
         let recitationItems = uniqueContent(dueRecitation + newRecitation).prefix(10)
 
         let vocabTasks = vocabItems.flatMap { card in
-            tasks(forVocabID: card.stableContentID, isNew: !hadSuccessfulReview(card))
+            tasks(forVocabID: card.stableContentID, stage: studyStage(for: card))
         }
         let writingTasks = writingItems.compactMap { card -> PracticeTask? in
             guard let item = content.sentenceMap[card.stableContentID] else { return nil }
-            return writingTask(item, isNew: !hadSuccessfulReview(card))
+            return writingTask(item, stage: studyStage(for: card))
         }
         let recitationTasks = recitationItems.compactMap { card -> PracticeTask? in
             guard let item = content.recitationMap[card.stableContentID] else { return nil }
-            return recitationTask(item, isNew: !hadSuccessfulReview(card))
+            return recitationTask(item, stage: studyStage(for: card))
         }
 
         save()
@@ -86,7 +86,7 @@ final class StudyStore {
             case .sentence: progress.writingCompleted += 1
             case .recitation: progress.recitationCompleted += 1
             }
-            if card.repetitions <= 1 {
+            if task.isNew {
                 progress.newItemsIntroduced += 1
             } else {
                 progress.reviewsCompleted += 1
@@ -171,7 +171,8 @@ final class StudyStore {
     private func introduce(from ids: [String], type: ContentType, limit: Int) -> [ReviewCard] {
         guard limit > 0 else { return [] }
         let existing = allCards().filter { $0.contentTypeValue == type }
-        let pending = existing.filter { $0.isIntroduced && $0.repetitions == 0 }
+        // Only never-attempted cards count as new. Failed items wait for nextReview via dueCards.
+        let pending = existing.filter { $0.isIntroduced && $0.lastReviewed == nil }
         if pending.count >= limit {
             return Array(pending.prefix(limit))
         }
@@ -213,8 +214,25 @@ final class StudyStore {
         return card
     }
 
-    private func hadSuccessfulReview(_ card: ReviewCard) -> Bool {
-        card.repetitions > 0 && card.lastQuality >= 3
+    private func studyStage(for card: ReviewCard) -> StudyStage {
+        if !hasBeenPracticed(card) { return .fresh }
+        if card.lastQuality < 3 || card.repetitions == 0 { return .rollback }
+        return .review
+    }
+
+    private func hasBeenPracticed(_ card: ReviewCard) -> Bool {
+        if card.lastReviewed != nil { return true }
+        if card.lapses > 0 { return true }
+        if card.lastScore > 0 { return true }
+        return hasAttemptLog(for: card.stableContentID)
+    }
+
+    private func hasAttemptLog(for contentId: String) -> Bool {
+        guard !contentId.isEmpty else { return false }
+        let request = AttemptLog.fetchRequest()
+        request.predicate = NSPredicate(format: "contentId == %@", contentId)
+        request.fetchLimit = 1
+        return ((try? context.fetch(request)) ?? []).isEmpty == false
     }
 
     private func uniqueContent(_ cards: [ReviewCard]) -> [ReviewCard] {
@@ -242,23 +260,23 @@ final class StudyStore {
         return mixed
     }
 
-    private func tasks(forVocabID id: String, isNew: Bool) -> [PracticeTask] {
+    private func tasks(forVocabID id: String, stage: StudyStage) -> [PracticeTask] {
         guard let word = content.wordMap[id] else { return [] }
         var result: [PracticeTask] = []
-        result.append(spellTask(word, isNew: isNew))
-        if !isNew {
-            result.append(toChineseTask(word, isNew: false))
+        result.append(spellTask(word, stage: stage))
+        if stage != .fresh {
+            result.append(toChineseTask(word, stage: stage))
         }
-        if word.category == .irregularVerb, let formTask = verbFormTask(word, isNew: isNew) {
+        if word.category == .irregularVerb, let formTask = verbFormTask(word, stage: stage) {
             result.append(formTask)
         }
-        if word.category == .phrasalVerb, let gap = phrasalTask(word, isNew: isNew) {
+        if word.category == .phrasalVerb, let gap = phrasalTask(word, stage: stage) {
             result.append(gap)
         }
         return result
     }
 
-    private func spellTask(_ word: VocabItem, isNew: Bool) -> PracticeTask {
+    private func spellTask(_ word: VocabItem, stage: StudyStage) -> PracticeTask {
         PracticeTask(
             id: "spell-\(word.id)",
             kind: .vocabSpell,
@@ -271,11 +289,11 @@ final class StudyStore {
             exampleEn: word.exampleEn,
             exampleZh: word.exampleZh,
             choices: [],
-            isNew: isNew
+            stage: stage
         )
     }
 
-    private func toChineseTask(_ word: VocabItem, isNew: Bool) -> PracticeTask {
+    private func toChineseTask(_ word: VocabItem, stage: StudyStage) -> PracticeTask {
         var pool = content.words(in: word.category).filter { $0.id != word.id }
         if pool.count < 3 {
             pool = content.words.filter { $0.id != word.id }
@@ -296,11 +314,11 @@ final class StudyStore {
             exampleEn: word.exampleEn,
             exampleZh: word.exampleZh,
             choices: choices,
-            isNew: isNew
+            stage: stage
         )
     }
 
-    private func verbFormTask(_ word: VocabItem, isNew: Bool) -> PracticeTask? {
+    private func verbFormTask(_ word: VocabItem, stage: StudyStage) -> PracticeTask? {
         let kinds = VerbFormKind.allCases.filter { word.form(for: $0) != nil }
         guard let kind = kinds.randomElement(), let expected = word.form(for: kind) else { return nil }
         return PracticeTask(
@@ -315,11 +333,11 @@ final class StudyStore {
             exampleEn: word.exampleEn,
             exampleZh: word.exampleZh,
             choices: [],
-            isNew: isNew
+            stage: stage
         )
     }
 
-    private func phrasalTask(_ word: VocabItem, isNew: Bool) -> PracticeTask? {
+    private func phrasalTask(_ word: VocabItem, stage: StudyStage) -> PracticeTask? {
         guard let gap = word.gapSentence, let answer = word.gapAnswer else { return nil }
         return PracticeTask(
             id: "gap-\(word.id)",
@@ -333,11 +351,11 @@ final class StudyStore {
             exampleEn: word.exampleEn,
             exampleZh: word.exampleZh,
             choices: [],
-            isNew: isNew
+            stage: stage
         )
     }
 
-    private func writingTask(_ item: SentenceItem, isNew: Bool) -> PracticeTask {
+    private func writingTask(_ item: SentenceItem, stage: StudyStage) -> PracticeTask {
         PracticeTask(
             id: "sent-\(item.id)",
             kind: .sentence,
@@ -350,11 +368,11 @@ final class StudyStore {
             exampleEn: item.english,
             exampleZh: item.focusZh,
             choices: [],
-            isNew: isNew
+            stage: stage
         )
     }
 
-    private func recitationTask(_ item: RecitationItem, isNew: Bool) -> PracticeTask {
+    private func recitationTask(_ item: RecitationItem, stage: StudyStage) -> PracticeTask {
         PracticeTask(
             id: "rec-\(item.id)",
             kind: .recitation,
@@ -367,7 +385,7 @@ final class StudyStore {
             exampleEn: item.english,
             exampleZh: item.chinese,
             choices: [],
-            isNew: isNew
+            stage: stage
         )
     }
 

@@ -143,7 +143,7 @@ struct PracticeSessionView: View {
                 Text(task.kind.title)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(AppTheme.gold)
-                NewReviewBadge(isNew: task.isNew)
+                NewReviewBadge(stage: task.stage)
                 Spacer()
                 Text(task.subtitle)
                     .font(.caption)
@@ -383,7 +383,7 @@ struct PracticeSessionView: View {
                 exampleEn: task.exampleEn,
                 exampleZh: task.exampleZh,
                 choices: task.choices,
-                isNew: false
+                stage: .rollback
             )
             queue.insert(retry, at: retryIndex)
         }

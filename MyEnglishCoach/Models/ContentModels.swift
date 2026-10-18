@@ -125,6 +125,20 @@ struct RecitationItem: Identifiable, Codable, Hashable {
     let tip: String
 }
 
+enum StudyStage: String, Hashable {
+    case fresh
+    case review
+    case rollback
+
+    var badgeTitle: String {
+        switch self {
+        case .fresh: "新学"
+        case .review: "复习"
+        case .rollback: "回滚"
+        }
+    }
+}
+
 struct PracticeTask: Identifiable, Hashable {
     let id: String
     let kind: PracticeKind
@@ -137,5 +151,7 @@ struct PracticeTask: Identifiable, Hashable {
     let exampleEn: String
     let exampleZh: String
     let choices: [String]
-    let isNew: Bool
+    let stage: StudyStage
+
+    var isNew: Bool { stage == .fresh }
 }
