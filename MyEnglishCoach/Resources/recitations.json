@@ -1,0 +1,32 @@
+{
+  "passages": [
+    {"id":"r_001","chinese":"安全第一。进入工地之前，你必须戴上安全帽。","english":"Safety comes first. You must wear a hard hat before entering the job site.","track":"trades","tip":"两句都要说完整；注意 must 的重音。"},
+    {"id":"r_002","chinese":"请按书面顺序执行说明。不要跳过任何步骤。","english":"Follow the instructions in the order they are written. Do not skip any steps.","track":"trades","tip":"第二句用 Don't 也可以，但请尽量说完整否定。"},
+    {"id":"r_003","chinese":"如果警报响起，立刻离开作业区，并报告给你的主管。","english":"If the alarm sounds, leave the work area immediately and report it to your supervisor.","track":"trades","tip":"条件句 if 从句用现在时，主句用祈使语气。"},
+    {"id":"r_004","chinese":"切断电源，完成上锁，然后再打开配电箱。","english":"Turn off the power, complete the lockout, and then open the panel.","track":"trades","tip":"三个动作按顺序：turn off, complete, open。"},
+    {"id":"r_005","chinese":"损坏的个人防护用品必须更换。千万不要继续使用。","english":"Damaged PPE must be replaced. Never keep using it.","track":"trades","tip":"PPE 按字母读：P-P-E。"},
+    {"id":"r_006","chinese":"在安装之前，先检查梯子是否放在坚实平整的地面上。","english":"Before you install the ladder, check that it is on firm, level ground.","track":"trades","tip":"firm 和 level 是两个并列形容词。"},
+    {"id":"r_007","chinese":"绝不要站在悬吊重物下面。坠落物可能造成重伤。","english":"Never stand under a suspended load. A falling object can cause a serious injury.","track":"trades","tip":"falling 是动名词/现在分词作定语。"},
+    {"id":"r_008","chinese":"英语 12 达到百分之五十，就可以满足第三类入学要求。","english":"English Studies 12 with 50 percent meets the Category 3 admission requirement.","track":"trades","tip":"Category 3 是专有说法，数字用 three。"},
+    {"id":"r_009","chinese":"如果你没有英语 12 成绩，也可以参加 BCIT 工科英语入学测评。","english":"If you do not have English 12, you can take the BCIT English Trades Entry Assessment.","track":"trades","tip":"Assessment 重音在第二音节。"},
+    {"id":"r_010","chinese":"同等的英语课程也可能被接受。请向招生办确认。","english":"An equivalent English course may also be accepted. Please confirm with admissions.","track":"trades","tip":"equivalent 有四个音节。"},
+    {"id":"r_011","chinese":"有力的论证需要一个清楚的主张，还需要相关的证据。","english":"A strong argument needs a clear claim and relevant evidence.","track":"academic","tip":"claim 和 evidence 是一对学术核心词。"},
+    {"id":"r_012","chinese":"动笔之前，先确保你真正理解了题目。","english":"Before you start writing, make sure you truly understand the question.","track":"academic","tip":"make sure 后面接完整从句。"},
+    {"id":"r_013","chinese":"虽然这个想法很有趣，但是它缺少证据。","english":"Although the idea is interesting, it lacks evidence.","track":"academic","tip":"although 不能和 but 连用。"},
+    {"id":"r_014","chinese":"把中心论点放在引言结尾，然后用段落去支撑它。","english":"Put your thesis at the end of the introduction, then support it with body paragraphs.","track":"academic","tip":"thesis 读作 /ˈθiːsɪs/。"},
+    {"id":"r_015","chinese":"要解释引文，而不只是把它抄进文章里。","english":"Interpret the quotation; do not just copy it into your essay.","track":"academic","tip":"interpret 重音在第二音节。"},
+    {"id":"r_016","chinese":"每一个段落都应该只展开一个中心意思。","english":"Each paragraph should develop only one controlling idea.","track":"academic","tip":"should 表示建议性要求。"},
+    {"id":"r_017","chinese":"根据评分标准，语法和连贯性仍然会影响分数。","english":"According to the rubric, grammar and coherence still affect the mark.","track":"academic","tip":"according to 后面接名词。"},
+    {"id":"r_018","chinese":"删除与中心论点无关的细节，文章会更连贯。","english":"Delete details that are not relevant to the thesis, and the essay will be more coherent.","track":"academic","tip":"relevant 和 coherent 都是学术高频形容词。"},
+    {"id":"r_019","chinese":"间隔重复的关键，是在快要忘记的时候再复习。","english":"The key to spaced repetition is to review just before you forget.","track":"academic","tip":"the key to 后面接名词或动名词。"},
+    {"id":"r_020","chinese":"不要把今天到期的卡片往后拖，否则你会落后。","english":"Do not put off the cards that are due today, or you will fall behind.","track":"academic","tip":"put off 和 fall behind 都是动词短语。"},
+    {"id":"r_021","chinese":"每天花二十分钟，把新内容和旧内容混在一起练习。","english":"Spend twenty minutes each day mixing new material with old review.","track":"academic","tip":"spend 的过去式是 spent；这里用原形祈使。"},
+    {"id":"r_022","chinese":"如果你不确定，就查阅术语表，并把新词写下来。","english":"If you are not sure, look up the term in the glossary and write it down.","track":"academic","tip":"look up 和 write down 是两个动词短语。"},
+    {"id":"r_023","chinese":"请提前十五分钟到场。迟到可能会失去考试座位。","english":"Please show up fifteen minutes early. If you are late, you may lose your test seat.","track":"trades","tip":"show up 表示到场；lose 的过去式是 lost。"},
+    {"id":"r_024","chinese":"向主管报告隐患时，说话要清楚、具体。","english":"When you report a hazard to your supervisor, speak clearly and be specific.","track":"trades","tip":"when 时间从句用现在时。"},
+    {"id":"r_025","chinese":"第一次车间课前，要买符合认证的安全鞋和护目镜。","english":"Before the first shop class, buy certified safety boots and safety glasses.","track":"trades","tip":"buy 的过去式是 bought，这里用原形。"},
+    {"id":"r_026","chinese":"即使伤得不重，也要把事情报告上去。","english":"Report it even if you are not badly hurt.","track":"trades","tip":"hurt 的过去式和过去分词都是 hurt。"},
+    {"id":"r_027","chinese":"结果泄漏是因为接头裂了，而不是阀门松了。","english":"The leak turned out to be a cracked fitting, not a loose valve.","track":"trades","tip":"turn out to be 表示“结果是”。"},
+    {"id":"r_028","chinese":"相比之下，工科测评更侧重说明书、安全和现场沟通。","english":"In contrast, the trades assessment focuses on instructions, safety, and workplace communication.","track":"academic","tip":"三个名词用 and 连接，注意并列停顿。"}
+  ]
+}
